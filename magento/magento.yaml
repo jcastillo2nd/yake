@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: magento-deployment
+  labels:
+    app: magento-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: magento-app
+  template:
+    metadata:
+      labels:
+        app: magento-app
+    spec:
+      activeDeadlineSeconds: 300
+      containers:
+      - name: magento
+        image: bitnami/magento
+        env:
+        - name: MARIADB_HOST
+          value: mariadb-service 
+        - name: MARIADB_PORT_NUMBER
+          value: "3306"
+        - name: MAGENTO_DATABASE_USER
+          value: root
+        - name: MAGENTO_DATABASE_PASSWORD
+          value: mymariadbpassword
+        - name: MAGENTO_DATABASE_NAME
+          value: magentodb
+        ports:
+        - containerPort: 80
